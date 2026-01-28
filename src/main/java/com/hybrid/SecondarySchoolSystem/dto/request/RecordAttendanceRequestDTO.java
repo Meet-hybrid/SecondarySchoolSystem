@@ -1,0 +1,50 @@
+package com.hybrid.SecondarySchoolSystem.dto.request;
+
+public class RecordAttendanceRequestDTO {
+    private String studentId;
+    private String classId;
+    private String date;
+    private String status;
+
+    public RecordAttendanceRequestDTO() {
+    }
+
+    public RecordAttendanceRequestDTO(String studentId, String classId, String date, String status) {
+        this.studentId = studentId;
+        this.classId = classId;
+        this.date = date;
+        this.status = status;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+    public String getClassId() {
+        return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+}

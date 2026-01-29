@@ -16,12 +16,12 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-   public Student createStudent(String name, String classLevel, String department){
-        // For simplicity, check if a student with same name exists
-        if (studentRepository.findByName(name).isPresent()) {
-            throw new DuplicateStudentException("Student already exists");
-        }
-       Student student = new Student(null, name, classLevel, department);
+   public Student createStudent(String firstName, String lastName, String registrationNumber, String level, String classId, String parentEmail){
+
+        // check if a student with same name exists
+       if (studentRepository.findByRegistrationNumber(registrationNumber).isPresent())
+           throw new  DuplicateStudentException("Student with registration number" + registrationNumber + "already exists");
+
        return studentRepository.save(student);
    }
 

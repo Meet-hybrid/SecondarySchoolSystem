@@ -32,7 +32,7 @@ public class StudentController {
         );
         StudentResponse studentResponse = new StudentResponse(
                 student.getName(),
-                student.getClassLevel(),
+                student.getLastName(),
                 student.setDepartment()
         );
         return ResponseEntity.ok(studentResponse);
@@ -46,7 +46,7 @@ public class StudentController {
         List<StudentResponse> responses = students.stream()
                 .map(student -> new StudentResponse(
                         student.getName(),
-                        student.getClassLevel(),
+                        student.getLastName(),
                         student.getDepartment()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responses);

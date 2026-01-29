@@ -32,7 +32,7 @@ class StudentServiceTest {
 
         assertNotNull(student);
         assertEquals("Ajebo Dev", student.getName());
-        assertEquals("SSS3", student.getClassLevel());
+        assertEquals("SSS3", student.getLastName());
         assertEquals("SCIENCE", student.getDepartment());
     }
 
@@ -139,9 +139,9 @@ class StudentServiceTest {
         Student sss2 = studentService.createStudent("Student2", "SSS2", "SCIENCE");
         Student sss3 = studentService.createStudent("Student3", "SSS3", "SCIENCE");
         
-        assertEquals("SSS1", sss1.getClassLevel());
-        assertEquals("SSS2", sss2.getClassLevel());
-        assertEquals("SSS3", sss3.getClassLevel());
+        assertEquals("SSS1", sss1.getLastName());
+        assertEquals("SSS2", sss2.getLastName());
+        assertEquals("SSS3", sss3.getLastName());
     }
 
     @Test
@@ -164,10 +164,10 @@ class StudentServiceTest {
         
         assertNotNull(student.getId());
         assertNotNull(student.getName());
-        assertNotNull(student.getClassLevel());
+        assertNotNull(student.getLastName());
         assertNotNull(student.getDepartment());
         assertEquals("FullName", student.getName());
-        assertEquals("SSS2", student.getClassLevel());
+        assertEquals("SSS2", student.getLastName());
         assertEquals("ARTS", student.getDepartment());
     }
 

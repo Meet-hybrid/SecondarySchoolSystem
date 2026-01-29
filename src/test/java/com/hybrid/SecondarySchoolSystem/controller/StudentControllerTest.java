@@ -1,7 +1,6 @@
 package com.hybrid.SecondarySchoolSystem.controller;
 
 import com.hybrid.SecondarySchoolSystem.dto.request.CreateStudentRequestDTO;
-import com.hybrid.SecondarySchoolSystem.dto.response.StudentResponse;
 import com.hybrid.SecondarySchoolSystem.entity.Student;
 import com.hybrid.SecondarySchoolSystem.repository.StudentRepository;
 import com.hybrid.SecondarySchoolSystem.service.StudentService;
@@ -36,7 +35,7 @@ class StudentControllerTest {
         assertTrue(students.size() > 0);
         Student created = students.get(students.size() - 1);
         assertEquals("NewStudent", created.getName());
-        assertEquals("SSS1", created.getClassLevel());
+        assertEquals("SSS1", created.getLastName());
         assertEquals("SCIENCE", created.getDepartment());
     }
 

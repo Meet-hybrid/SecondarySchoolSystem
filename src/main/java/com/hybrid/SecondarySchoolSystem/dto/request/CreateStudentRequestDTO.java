@@ -1,40 +1,61 @@
 package com.hybrid.SecondarySchoolSystem.dto.request;
 
 public class CreateStudentRequestDTO {
-    private String name;
-    private String classLevel;
-    private String department;
+    private String firstName;
+    private String lastName;
+    private String registrationNumber;
+    private String level;
+    private String classId;
+    private String parentEmail;
 
     public CreateStudentRequestDTO() {
     }
 
-    public CreateStudentRequestDTO(String name, String classLevel, String department) {
-        this.name = name;
-        this.classLevel = classLevel;
-        this.department = department;
+
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getName() {
-        return name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getClassLevel() {
-        return classLevel;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public void setClassLevel(String classLevel) {
-        this.classLevel = classLevel;
+    public String getRegistrationNumber() {
+        return registrationNumber;
     }
 
-    public String getDepartment() {
-        return department;
+    public void setRegistrationNumber(String classLevel) {
+        this.registrationNumber = registrationNumber;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public String getClassId() {
+        return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
+    }
+
+    public String getParentEmail() {
+        return parentEmail;
+    }
+
+    public void setParentEmail(String parentEmail) {
+        this.parentEmail = parentEmail;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+    public void setLevel(String level) {
+        this.level = level;
     }
 }

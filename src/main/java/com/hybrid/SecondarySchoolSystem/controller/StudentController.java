@@ -22,16 +22,32 @@ public class StudentController {
 
     @PostMapping
     public ResponseEntity<StudentResponse> createStudent(@RequestBody CreateStudentRequestDTO request) {
-        Student student = studentService.createStudent(request.getName(), request.getClassLevel(), request.getDepartment());
-        StudentResponse response = new StudentResponse(student.getName(), student.getClassLevel(), student.getDepartment());
-        return ResponseEntity.ok(response);
+        Student student = studentService.createStudent(
+                request.getFirstName(),
+                request.getLastName(),
+                request.getRegistrationNumber(),
+                request.getLevel(),
+                request.getClassId(),
+                request.getParentEmail()
+        );
+        StudentResponse studentResponse = new StudentResponse(
+                student.getName(),
+                student.getClassLevel(),
+                student.setDepartment()
+        );
+        return ResponseEntity.ok(studentResponse);
     }
+
+
 
     @GetMapping
     public ResponseEntity<List<StudentResponse>> getAllStudents() {
         List<Student> students = studentService.getAllStudents();
         List<StudentResponse> responses = students.stream()
-                .map(student -> new StudentResponse(student.getName(), student.getClassLevel(), student.getDepartment()))
+                .map(student -> new StudentResponse(
+                        student.getName(),
+                        student.getClassLevel(),
+                        student.getDepartment()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responses);
     }

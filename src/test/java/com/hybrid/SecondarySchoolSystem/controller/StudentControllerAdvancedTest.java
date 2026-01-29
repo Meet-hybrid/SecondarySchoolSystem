@@ -27,15 +27,17 @@ public class StudentControllerAdvancedTest {
 
     @Test
     public void testCreateStudentWithValidDetails() {
-        CreateStudentRequestDTO dto = new CreateStudentRequestDTO();
-        dto.setFirstName("John");
-        dto.setLastName("Doe");
-        dto.setRegistrationNumber("REG001");
-        dto.setLevel("SS1");
-        dto.setClassId("Class1");
-        dto.setParentEmail("parent@email.com");
+        CreateStudentRequestDTO newStudent = new CreateStudentRequestDTO();
+        newStudent.setFirstName("John");
+        newStudent.setLastName("Doe");
+        newStudent.setRegistrationNumber("REG001");
+        newStudent.setLevel("SS1");
+        newStudent.setClassId("Class1");
+        newStudent.setParentEmail("parent@email.com");
 
-        StudentResponse response = studentController.createStudent(dto);
+        StudentResponse response = new studentController.createStudent();
+        assertNotNull(response);
+        assertEquals("John", response.getFirstname);
 
         assertNotNull(response);
         assertEquals("John", response.getFirstName());
@@ -46,41 +48,41 @@ public class StudentControllerAdvancedTest {
 
     @Test
     public void testCreateMultipleStudents() {
-        CreateStudentRequestDTO dto1 = new CreateStudentRequestDTO();
-        dto1.setFirstName("Alice");
-        dto1.setLastName("Smith");
-        dto1.setRegistrationNumber("REG002");
-        dto1.setLevel("SS2");
-        dto1.setClassId("Class2");
-        dto1.setParentEmail("alice@email.com");
+        CreateStudentRequestDTO scienceStudent = new CreateStudentRequestDTO();
+        scienceStudent.setFirstName("Alice");
+        scienceStudent.setLastName("Smith");
+        scienceStudent.setRegistrationNumber("REG002");
+        scienceStudent.setLevel("SS2");
+        scienceStudent.setClassId("Class2");
+        scienceStudent.setParentEmail("alice@email.com");
 
-        CreateStudentRequestDTO dto2 = new CreateStudentRequestDTO();
-        dto2.setFirstName("Bob");
-        dto2.setLastName("Johnson");
-        dto2.setRegistrationNumber("REG003");
-        dto2.setLevel("SS3");
-        dto2.setClassId("Class3");
-        dto2.setParentEmail("bob@email.com");
+        CreateStudentRequestDTO artsStudent = new CreateStudentRequestDTO();
+        artsStudent.setFirstName("Bob");
+        artsStudent.setLastName("Johnson");
+        artsStudent.setRegistrationNumber("REG003");
+        artsStudent.setLevel("SS3");
+        artsStudent.setClassId("Class3");
+        artsStudent.setParentEmail("bob@email.com");
 
-        StudentResponse response1 = studentController.createStudent(dto1);
-        StudentResponse response2 = studentController.createStudent(dto2);
+        StudentResponse responseOne = studentController.createStudent(scienceStudent);
+        StudentResponse responseTwo = studentController.createStudent(artsStudent);
 
-        assertNotNull(response1);
-        assertNotNull(response2);
-        assertNotEquals(response1.getId(), response2.getId());
+        assertNotNull(responseOne);
+        assertNotNull(responseTwo);
+        assertNotEquals(responseOne.getId(), responseTwo.getId());
     }
 
     @Test
     public void testGetAllStudents() {
-        CreateStudentRequestDTO dto1 = new CreateStudentRequestDTO();
-        dto1.setFirstName("Charlie");
-        dto1.setLastName("Brown");
-        dto1.setRegistrationNumber("REG004");
-        dto1.setLevel("SS1");
-        dto1.setClassId("Class1");
-        dto1.setParentEmail("charlie@email.com");
+        CreateStudentRequestDTO registeredStudent = new CreateStudentRequestDTO();
+        registeredStudent.setFirstName("Charlie");
+        registeredStudent.setLastName("Brown");
+        registeredStudent.setRegistrationNumber("REG004");
+        registeredStudent.setLevel("SS1");
+        registeredStudent.setClassId("Class1");
+        registeredStudent.setParentEmail("charlie@email.com");
 
-        studentController.createStudent(dto1);
+        studentController.createStudent(registeredStudent);
 
         List<StudentResponse> students = studentController.getAllStudents();
 
@@ -90,46 +92,46 @@ public class StudentControllerAdvancedTest {
 
     @Test
     public void testDuplicateStudentThrowsException() {
-        CreateStudentRequestDTO dto = new CreateStudentRequestDTO();
-        dto.setFirstName("David");
-        dto.setLastName("Miller");
-        dto.setRegistrationNumber("REG005");
-        dto.setLevel("SS2");
-        dto.setClassId("Class2");
-        dto.setParentEmail("david@email.com");
+        CreateStudentRequestDTO initialRequest = new CreateStudentRequestDTO();
+        initialRequest.setFirstName("David");
+        initialRequest.setLastName("Miller");
+        initialRequest.setRegistrationNumber("REG005");
+        initialRequest.setLevel("SS2");
+        initialRequest.setClassId("Class2");
+        initialRequest.setParentEmail("david@email.com");
 
-        studentController.createStudent(dto);
+        studentController.createStudent(initialRequest);
 
-        CreateStudentRequestDTO duplicateDto = new CreateStudentRequestDTO();
-        duplicateDto.setFirstName("David");
-        duplicateDto.setLastName("Miller");
-        duplicateDto.setRegistrationNumber("REG005");
-        duplicateDto.setLevel("SS2");
-        duplicateDto.setClassId("Class2");
-        duplicateDto.setParentEmail("david2@email.com");
+        CreateStudentRequestDTO duplicateRequest = new CreateStudentRequestDTO();
+        duplicateRequest.setFirstName("David");
+        duplicateRequest.setLastName("Miller");
+        duplicateRequest.setRegistrationNumber("REG005");
+        duplicateRequest.setLevel("SS2");
+        duplicateRequest.setClassId("Class2");
+        duplicateRequest.setParentEmail("david2@email.com");
 
         assertThrows(DuplicateStudentException.class, () -> {
-            studentController.createStudent(duplicateDto);
+            studentController.createStudent(duplicateRequest);
         });
     }
 
     @Test
     public void testStudentWithDifferentLevels() {
-        CreateStudentRequestDTO[] dtos = new CreateStudentRequestDTO[3];
+        CreateStudentRequestDTO[] levelTestRequests = new CreateStudentRequestDTO[3];
         String[] levels = {"SS1", "SS2", "SS3"};
         
         for (int count = 0; count < 3; count++) {
-            dtos[count] = new CreateStudentRequestDTO();
-            dtos[count].setFirstName("Student" + count);
-            dtos[count].setLastName("Level" + count);
-            dtos[count].setRegistrationNumber("REG00" + (6 + count));
-            dtos[count].setLevel(levels[count]);
-            dtos[count].setClassId("Class" + (count + 1));
-            dtos[count].setParentEmail("student" + count + "@email.com");
+            levelTestRequests[count] = new CreateStudentRequestDTO();
+            levelTestRequests[count].setFirstName("Student" + count);
+            levelTestRequests[count].setLastName("Level" + count);
+            levelTestRequests[count].setRegistrationNumber("REG00" + (6 + count));
+            levelTestRequests[count].setLevel(levels[count]);
+            levelTestRequests[count].setClassId("Class" + (count + 1));
+            levelTestRequests[count].setParentEmail("student" + count + "@email.com");
         }
 
-        for (CreateStudentRequestDTO dto : dtos) {
-            StudentResponse response = studentController.createStudent(dto);
+        for (CreateStudentRequestDTO request : levelTestRequests) {
+            StudentResponse response = studentController.createStudent(request);
             assertNotNull(response);
         }
     }

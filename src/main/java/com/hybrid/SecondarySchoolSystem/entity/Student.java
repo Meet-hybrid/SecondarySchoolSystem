@@ -50,6 +50,7 @@ public class Student {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+        updateFullName();
     }
 
     public String getLastName() {
@@ -58,6 +59,7 @@ public class Student {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+        updateFullName();
     }
 
     public String getDepartment() {

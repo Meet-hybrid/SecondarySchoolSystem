@@ -32,13 +32,11 @@ public class StudentController {
         );
         StudentResponse studentResponse = new StudentResponse(
                 student.getName(),
-                student.getLastName(),
-                student.setDepartment()
+                student.getClassLevel(),
+                student.getClassId()
         );
         return ResponseEntity.ok(studentResponse);
     }
-
-
 
     @GetMapping
     public ResponseEntity<List<StudentResponse>> getAllStudents() {
@@ -46,8 +44,8 @@ public class StudentController {
         List<StudentResponse> responses = students.stream()
                 .map(student -> new StudentResponse(
                         student.getName(),
-                        student.getLastName(),
-                        student.getDepartment()))
+                        student.getClassLevel(),
+                        student.getClassId()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responses);
     }

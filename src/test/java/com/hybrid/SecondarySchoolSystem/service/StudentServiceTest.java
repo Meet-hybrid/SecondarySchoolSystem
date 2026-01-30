@@ -25,160 +25,181 @@ class StudentServiceTest {
     @Test
     public void adminCan_CreateStudent_Test() {
         Student student = studentService.createStudent(
-                "Ajebo Dev",
+                "Ajebo",
+                "Dev",
+                "REG001",
                 "SSS3",
-                "SCIENCE"
+                "CLASS01",
+                "parent@email.com"
         );
 
         assertNotNull(student);
         assertEquals("Ajebo Dev", student.getName());
-        assertEquals("SSS3", student.getLastName());
-        assertEquals("SCIENCE", student.getDepartment());
+        assertEquals("SSS3", student.getClassLevel());
+        assertEquals("REG001", student.getRegistrationNumber());
+        assertEquals("parent@email.com", student.getParentEmail());
     }
 
     @Test
     public void savedStudent_CanBeRetrieved_Test() {
-        studentService.createStudent("Ajebo Dev", "SSS3", "SCIENCE");
-        assertEquals(1, studentRepository.getAllStudents().size());
+        studentService.createStudent("Ajebo", "Dev", "REG001", "SSS3", "CLASS01", "parent@email.com");
+        assertEquals(1, studentRepository.findAll().size());
     }
 
     @Test
     public void adminCannot_CreateDuplicateStudent_Test() {
-        studentService.createStudent("Ajebo Dev", "SSS3", "SCIENCE");
+        studentService.createStudent("Ajebo", "Dev", "REG001", "SSS3", "CLASS01", "parent@email.com");
 
-        Exception exception = assertThrows(DuplicateStudentException.class, () -> 
-            studentService.createStudent("Ajebo Dev", "SSS3", "SCIENCE")
+        Exception exception = assertThrows(DuplicateStudentException.class, () ->
+                studentService.createStudent("Different", "Name", "REG001", "SSS2", "CLASS02", "other@email.com")
         );
 
-        assertEquals("Student already exists", exception.getMessage());
+        assertTrue(exception.getMessage().contains("REG001"));
+        assertTrue(exception.getMessage().contains("already exists"));
     }
 
     @Test
     public void createdStudent_HasValidId_Test() {
-        Student student = studentService.createStudent("Hybrid Tech", "SSS2", "SCIENCE");
-        
+        Student student = studentService.createStudent("Hybrid", "Tech", "REG002", "SSS2", "CLASS01", "parent2@email.com");
+
         assertNotNull(student.getId());
         assertFalse(student.getId().isEmpty());
     }
 
     @Test
     public void getAllStudents_ReturnsEmptyList_WhenNoStudents_Test() {
-        List<Student> students = studentRepository.getAllStudents();
-        
+        List<Student> students = studentRepository.findAll();
+
         assertNotNull(students);
         assertEquals(0, students.size());
     }
 
     @Test
     public void getAllStudents_ReturnsMultipleStudents_Test() {
-        studentService.createStudent("Student 1", "SSS1", "SCIENCE");
-        studentService.createStudent("Student 2", "SSS2", "ARTS");
-        studentService.createStudent("Student 3", "SSS3", "COMMERCIAL");
-        
-        List<Student> students = studentRepository.getAllStudents();
-        
+        studentService.createStudent("Student", "One", "REG001", "SSS1", "CLASS01", "parent1@email.com");
+        studentService.createStudent("Student", "Two", "REG002", "SSS2", "CLASS02", "parent2@email.com");
+        studentService.createStudent("Student", "Three", "REG003", "SSS3", "CLASS03", "parent3@email.com");
+
+        List<Student> students = studentRepository.findAll();
+
         assertEquals(3, students.size());
     }
 
     @Test
     public void findByName_ReturnsCorrectStudent_Test() {
-        studentService.createStudent("Leena", "SSS1", "SCIENCE");
-        studentService.createStudent("Fimi", "SSS2", "ARTS");
-        
-        Student found = studentRepository.findByName("Leena").orElse(null);
-        
+        studentService.createStudent("Leena", "Smith", "REG004", "SSS1", "CLASS01", "leena@email.com");
+        studentService.createStudent("Fimi", "Jones", "REG005", "SSS2", "CLASS02", "fimi@email.com");
+
+        Student found = studentRepository.findByName("Leena Smith").orElse(null);
+
         assertNotNull(found);
-        assertEquals("Leena", found.getName());
-        assertEquals("SCIENCE", found.getDepartment());
+        assertEquals("Leena Smith", found.getName());
+        assertEquals("SSS1", found.getClassLevel());
     }
 
     @Test
     public void findByName_ReturnsEmpty_WhenNotFound_Test() {
-        studentService.createStudent("Leena", "SSS1", "SCIENCE");
-        
+        studentService.createStudent("Leena", "Smith", "REG006", "SSS1", "CLASS01", "leena@email.com");
+
         Optional<Student> found = studentRepository.findByName("NonExistent");
-        
+
         assertTrue(found.isEmpty());
     }
 
     @Test
     public void findById_ReturnsCorrectStudent_Test() {
-        Student created = studentService.createStudent("Charlie", "SSS3", "COMMERCIAL");
-        
-        // Find all and check
-        List<Student> all = studentRepository.getAllStudents();
-        Student found = all.stream().filter(s -> s.getId().equals(created.getId())).findFirst().orElse(null);
-        
+        Student created = studentService.createStudent("Charlie", "Brown", "REG007", "SSS3", "CLASS03", "charlie@email.com");
+
+        Student found = studentRepository.findById(created.getId()).orElse(null);
+
         assertNotNull(found);
-        assertEquals("Charlie", found.getName());
+        assertEquals("Charlie Brown", found.getName());
         assertEquals(created.getId(), found.getId());
     }
 
     @Test
-    public void findById_ReturnsNull_WhenNotFound_Test() {
-        List<Student> all = studentRepository.getAllStudents();
-        Student found = all.stream().filter(s -> s.getId().equals("invalid-id-123")).findFirst().orElse(null);
-        
-        assertNull(found);
+    public void findById_ReturnsEmpty_WhenNotFound_Test() {
+        Optional<Student> found = studentRepository.findById("invalid-id-123");
+
+        assertTrue(found.isEmpty());
     }
 
     @Test
-    public void createStudent_WithDifferentDepartments_Test() {
-        Student science = studentService.createStudent("ScienceStudent", "SSS1", "SCIENCE");
-        Student arts = studentService.createStudent("ArtsStudent", "SSS1", "ARTS");
-        Student commercial = studentService.createStudent("CommStudent", "SSS1", "COMMERCIAL");
-        
-        assertEquals("SCIENCE", science.getDepartment());
-        assertEquals("ARTS", arts.getDepartment());
-        assertEquals("COMMERCIAL", commercial.getDepartment());
+    public void createStudent_WithDifferentClassIds_Test() {
+        Student science = studentService.createStudent("Science", "Student", "REG008", "SSS1", "SCIENCE_CLASS", "sci@email.com");
+        Student arts = studentService.createStudent("Arts", "Student", "REG009", "SSS1", "ARTS_CLASS", "arts@email.com");
+        Student commercial = studentService.createStudent("Comm", "Student", "REG010", "SSS1", "COMM_CLASS", "comm@email.com");
+
+        assertEquals("SCIENCE_CLASS", science.getClassId());
+        assertEquals("ARTS_CLASS", arts.getClassId());
+        assertEquals("COMM_CLASS", commercial.getClassId());
     }
 
     @Test
     public void createStudent_WithDifferentClassLevels_Test() {
-        Student sss1 = studentService.createStudent("Student1", "SSS1", "SCIENCE");
-        Student sss2 = studentService.createStudent("Student2", "SSS2", "SCIENCE");
-        Student sss3 = studentService.createStudent("Student3", "SSS3", "SCIENCE");
-        
-        assertEquals("SSS1", sss1.getLastName());
-        assertEquals("SSS2", sss2.getLastName());
-        assertEquals("SSS3", sss3.getLastName());
+        Student sssOne = studentService.createStudent("Student", "One", "REG011", "SSS1", "CLASS01", "s1@email.com");
+        Student sssTwo = studentService.createStudent("Student", "Two", "REG012", "SSS2", "CLASS01", "s2@email.com");
+        Student sssThree = studentService.createStudent("Student", "Three", "REG013", "SSS3", "CLASS01", "s3@email.com");
+
+        assertEquals("SSS1", sssOne.getClassLevel());
+        assertEquals("SSS2", sssTwo.getClassLevel());
+        assertEquals("SSS3", sssThree.getClassLevel());
     }
 
     @Test
     public void save_AddsStudentToRepository_Test() {
-        Student student = new Student("id1", "TestName", "SSS1", "SCIENCE");
-        
+        Student student = new Student("id1", "Test Name", "REG014", "SSS1", "CLASS01", "test@email.com");
+
         studentRepository.save(student);
-        
-        assertEquals(1, studentRepository.getAllStudents().size());
-        Student saved = studentRepository.getAllStudents().stream()
-            .filter(s -> s.getId().equals("id1"))
-            .findFirst()
-            .orElse(null);
-        assertEquals("TestName", saved.getName());
+
+        assertEquals(1, studentRepository.findAll().size());
+        Student saved = studentRepository.findById("id1").orElse(null);
+        assertNotNull(saved);
+        assertEquals("Test Name", saved.getName());
     }
 
     @Test
     public void studentHas_AllRequiredFields_Test() {
-        Student student = studentService.createStudent("FullName", "SSS2", "ARTS");
-        
+        Student student = studentService.createStudent("Full", "Name", "REG015", "SSS2", "CLASS02", "full@email.com");
+
         assertNotNull(student.getId());
         assertNotNull(student.getName());
-        assertNotNull(student.getLastName());
-        assertNotNull(student.getDepartment());
-        assertEquals("FullName", student.getName());
-        assertEquals("SSS2", student.getLastName());
-        assertEquals("ARTS", student.getDepartment());
+        assertNotNull(student.getRegistrationNumber());
+        assertNotNull(student.getClassLevel());
+        assertNotNull(student.getClassId());
+        assertNotNull(student.getParentEmail());
+        assertEquals("Full Name", student.getName());
+        assertEquals("REG015", student.getRegistrationNumber());
+        assertEquals("SSS2", student.getClassLevel());
+        assertEquals("full@email.com", student.getParentEmail());
     }
 
     @Test
     public void createdStudentsCount_IncrementsCorrectly_Test() {
-        int initial = studentRepository.getAllStudents().size();
-        
-        studentService.createStudent("Count1", "SSS1", "SCIENCE");
-        studentService.createStudent("Count2", "SSS2", "ARTS");
-        
-        int after = studentRepository.getAllStudents().size();
+        int initial = studentRepository.findAll().size();
+
+        studentService.createStudent("Count", "One", "REG016", "SSS1", "CLASS01", "count1@email.com");
+        studentService.createStudent("Count", "Two", "REG017", "SSS2", "CLASS02", "count2@email.com");
+
+        int after = studentRepository.findAll().size();
         assertEquals(initial + 2, after);
+    }
+
+    @Test
+    public void findByRegistrationNumber_ReturnsCorrectStudent_Test() {
+        studentService.createStudent("John", "Doe", "REG018", "SSS1", "CLASS01", "john@email.com");
+
+        Student found = studentRepository.findByRegistrationNumber("REG018").orElse(null);
+
+        assertNotNull(found);
+        assertEquals("John Doe", found.getName());
+        assertEquals("REG018", found.getRegistrationNumber());
+    }
+
+    @Test
+    public void findByRegistrationNumber_ReturnsEmpty_WhenNotFound_Test() {
+        Optional<Student> found = studentRepository.findByRegistrationNumber("NONEXISTENT");
+
+        assertTrue(found.isEmpty());
     }
 }

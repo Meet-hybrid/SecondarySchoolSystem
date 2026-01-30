@@ -16,14 +16,20 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-   public Student createStudent(String firstName, String lastName, String registrationNumber, String level, String classId, String parentEmail){
+   public Student createStudent(String firstName, String lastName, String registrationNumber,
+                                String level, String classId, String parentEmail) {
 
-        // check if a student with same name exists
-       if (studentRepository.findByRegistrationNumber(registrationNumber).isPresent())
-           throw new  DuplicateStudentException("Student with registration number" + registrationNumber + "already exists");
+       // check if a student with same name exists
+       if (studentRepository.findByRegistrationNumber(registrationNumber).isPresent()) {
+           throw new DuplicateStudentException("Student with registration number" + registrationNumber + "already exists");
 
+       }
+       String fullName = firstName + " " + lastName;
+       Student student = new Student(null, fullName, registrationNumber, level, classId, parentEmail);
        return studentRepository.save(student);
    }
+
+
 
    public List<Student> getAllStudents() {
        return studentRepository.findAll();

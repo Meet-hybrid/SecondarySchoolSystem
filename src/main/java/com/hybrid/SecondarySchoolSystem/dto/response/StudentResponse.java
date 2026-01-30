@@ -3,15 +3,15 @@ package com.hybrid.SecondarySchoolSystem.dto.response;
 public class StudentResponse {
     private String name;
     private String classLevel;
-    private String department;
+    private String classId;  // Changed from department
 
     public StudentResponse() {
     }
 
-    public StudentResponse(String name, String classLevel, String department) {
+    public StudentResponse(String name, String classLevel, String classId) {
         this.name = name;
         this.classLevel = classLevel;
-        this.department = department;
+        this.classId = classId;  // Changed from department
     }
 
     public String getName() {
@@ -30,11 +30,11 @@ public class StudentResponse {
         this.classLevel = classLevel;
     }
 
-    public String getDepartment() {
-        return department;
+    public String getClassId() {  // Changed from getDepartment
+        return classId;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setClassId(String classId) {  // Changed from setDepartment
+        this.classId = classId;
     }
 }
